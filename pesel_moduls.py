@@ -1,3 +1,10 @@
+# centuries
+nineteenth_century = ['81', '82', '83', '84', '85', '86', '87', '88', '89', '90', '91', '92']
+twentieth_century = ['01', '02', '03', '04', '05', '06', '07', '08', '09', '10', '11', '12']
+twentyfirst_century = ['21', '22', '23', '24', '25', '26', '27', '28', '29', '30', '31', '32']
+# months indexes
+months = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12']
+
 def PeselValidation(pesel):
     p=[]
 
@@ -7,19 +14,33 @@ def PeselValidation(pesel):
     sum_pesel=p[0]*9+p[1]*7+p[2]*3+p[3]*1+p[4]*9+p[5]*7+p[6]*3+p[7]*1+p[8]*9+p[9]*7
     sum_con=sum_pesel%10
 
-    if sum_con==int(pesel[-1]) and len(pesel)==11:
+    def DaysCheck(year, month, day):
+
+        year=getPeselYear(pesel)
+        month=pesel[2:4]
+        day=pesel[4:6]
+
+        if (yesr % 4 == 0 and year % 100 != 0) or year % 400 == 0:
+            days = [31, 29, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31]
+        else:
+            days = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31]
+
+        if year < 1800 or year > 2100:
+            raise ValueError('Niepoprawny rok')
+
+        if month not in months:
+            raise ValueError('Niepoprawny miesiac')
+
+        if day < 0 or day > days[month - 1]:
+            raise ValueError('Niepoprawna ilosc dni')
+
         return True
-    else:
-        return False
+
+    return sum_con==int(pesel[-1]) and len(pesel)==11
 
 def PeselInfo(pesel):
-
-    #centuries
-    nineteenth_century=['81', '82', '83', '84', '85', '86', '87', '88', '89', '90', '91', '92']
-    twentieth_century=['01', '02', '03', '04', '05', '06', '07', '08', '09', '10', '11', '12']
-    twentyfirst_century=['21', '22', '23', '24', '25', '26', '27', '28', '29', '30', '31', '32']
-    #months indexes
-    months=['1','2','3','4','5','6','7','8','9','10','11','12']
+    if PeselValidation(pesel) is False:
+        raise ValueError('To nie jest poprawny pesel!')
     #dictionary with pesel months as keys and number of months as values
     dictionary={}
 
@@ -53,16 +74,15 @@ def PeselInfo(pesel):
     month=formatMonth(dictionary[pesel[2:4]])
     day=pesel[4:6]
     full_birth_date=year+'-'+month+'-'+day
-    return full_birth_date
 
 #validation sex - Famele or Male
-def FemaleOrMale(pesel):
-    pesel_sex=pesel[9]
-    if int(pesel_sex)%2==0:
-        pesel_sex='Woman'
-    else:
-        pesel_sex='Man'
-    return pesel_sex
+    def FemaleOrMale(pesel):
+        pesel_sex=pesel[9]
+        if int(pesel_sex)%2==0:
+            pesel_sex='Female'
+        else:
+            pesel_sex='Male'
+        return pesel_sex
 
     sex=FemaleOrMale(pesel)
 
