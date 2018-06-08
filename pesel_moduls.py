@@ -23,7 +23,6 @@ def PeselValidation(pesel):
         for char in pesel:
         p.append(int(char))"""
     p=[int(pi) for pi in pesel]
-    print(p)
 
     sum_pesel=p[0]*9+p[1]*7+p[2]*3+p[3]*1+p[4]*9+p[5]*7+p[6]*3+p[7]*1+p[8]*9+p[9]*7
     sum_con=sum_pesel%10
@@ -34,7 +33,6 @@ def PeselValidation(pesel):
         month=pesel[2:4]
         day=int(pesel[4:6])
 
-        print(month)
 
         if (year % 4 == 0 and year % 100 != 0) or year % 400 == 0:
             days = [31, 29, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31]
